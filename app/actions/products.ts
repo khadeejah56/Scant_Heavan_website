@@ -46,9 +46,17 @@ const ProductSchema = z.object({
     .optional()
     .transform((v) => (v === undefined || Number.isNaN(v) ? undefined : v)),
   size: z.string().trim().min(1, { error: "Size is required." }),
-  images: z.array(z.string().trim().url()).min(1, {
-    error: "At least one image URL is required.",
-  }),
+  images: z
+    .array(
+      z.string().trim().refine(
+        (v) => v.startsWith("/") || /^https?:\/\//.test(v),
+        {
+          error:
+            "Each image must be a full https:// URL or a local path starting with / (e.g. /images/products/mens/men1.png).",
+        }
+      )
+    )
+    .min(1, { error: "At least one image is required." }),
   shortDescription: z.string().trim().min(1, { error: "Short description is required." }),
   description: z.string().trim().min(1, { error: "Description is required." }),
   notesTop: z.array(z.string()).min(1, { error: "At least one top note is required." }),

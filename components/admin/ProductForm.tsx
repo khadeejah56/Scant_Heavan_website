@@ -194,13 +194,18 @@ export default function ProductForm({
 
       <section className="space-y-2">
         <label className="text-xs uppercase tracking-luxe opacity-70">
-          Image URLs (one per line)
+          Images (one per line)
         </label>
+        <p className="text-xs opacity-50">
+          Either a full https:// URL, or a local path like{" "}
+          <code>/images/products/mens/men1.png</code> for a file you&apos;ve
+          placed in <code>public/images/...</code>.
+        </p>
         <textarea
           name="images"
           rows={3}
           defaultValue={defaultValues?.images.join("\n")}
-          placeholder="https://example.com/image1.jpg"
+          placeholder="https://example.com/image1.jpg&#10;/images/products/mens/men1.png"
           className="w-full bg-transparent border border-current/20 p-3 text-sm outline-none focus:border-champagne"
         />
         {state.fieldErrors?.images && (

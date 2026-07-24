@@ -59,7 +59,7 @@ export const products: Product[] = [
     price: 54600,
     size: "100ml",
     concentration: "Eau de Parfum",
-    images: ["/images/products/mens/Men1.png"],
+    images: ["/images/products/mens/men1.png"],
     shortDescription: "Spiced amber with a leather undertone.",
     description:
       "Ambre Royal pairs saffron and cardamom against a backdrop of supple leather and warm amber — assertive, grounded, and built to last from morning to midnight.",
