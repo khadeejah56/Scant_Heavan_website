@@ -1,55 +1,48 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useActionState } from "react";
 import Link from "next/link";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { login, signup, type AuthState } from "@/app/actions/auth";
 
 interface AuthFormProps {
   mode: "login" | "signup";
 }
 
+const initialState: AuthState = {};
+
 export default function AuthForm({ mode }: AuthFormProps) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    if (!email || !password) {
-      setError("Please fill in all required fields.");
-      return;
-    }
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return;
-    }
-
-    setIsLoading(true);
-    // Simulated auth request — replace with a real API call.
-    await new Promise((r) => setTimeout(r, 900));
-    setIsLoading(false);
-    router.push("/account");
-  };
+  const [state, formAction, isPending] = useActionState(
+    mode === "login" ? login : signup,
+    initialState
+  );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form action={formAction} className="space-y-6">
       {mode === "signup" && (
-        <Input label="Full Name" name="name" type="text" required />
+        <Input
+          label="Full Name"
+          name="name"
+          type="text"
+          required
+          error={state.fieldErrors?.name?.[0]}
+        />
       )}
-      <Input label="Email Address" name="email" type="email" required />
+      <Input
+        label="Email Address"
+        name="email"
+        type="email"
+        required
+        error={state.fieldErrors?.email?.[0]}
+      />
       <Input
         label="Password"
         name="password"
         type="password"
         required
         minLength={6}
+        error={state.fieldErrors?.password?.[0]}
       />
       {mode === "login" && (
         <div className="flex justify-end">
@@ -62,9 +55,9 @@ export default function AuthForm({ mode }: AuthFormProps) {
         </div>
       )}
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {state.error && <p className="text-xs text-red-400">{state.error}</p>}
 
-      <Button type="submit" className="w-full" isLoading={isLoading}>
+      <Button type="submit" className="w-full" isLoading={isPending}>
         {mode === "login" ? "Sign In" : "Create Account"}
       </Button>
 
