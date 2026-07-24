@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Package, Heart, MapPin, LogOut } from "lucide-react";
+import { Package, Heart, MapPin, LogOut, ShieldCheck } from "lucide-react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { requireUser } from "@/lib/dal";
 import { prisma } from "@/lib/db";
@@ -31,6 +31,15 @@ export default async function AccountPage() {
           Welcome, {user.name}
         </h1>
       </div>
+
+      {user.role === "ADMIN" && (
+        <Link
+          href="/admin"
+          className="inline-flex items-center gap-2 text-xs uppercase tracking-luxe text-champagne hover:underline mb-10"
+        >
+          <ShieldCheck size={14} /> Admin Dashboard
+        </Link>
+      )}
 
       <div className="grid md:grid-cols-3 gap-6 mb-14">
         <Link

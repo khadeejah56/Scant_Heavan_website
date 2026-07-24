@@ -1,6 +1,7 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
+import type { Role } from "@prisma/client";
 import { env } from "@/lib/env";
 
 const COOKIE_NAME = "session";
@@ -8,6 +9,7 @@ const encodedKey = new TextEncoder().encode(env.JWT_SECRET);
 
 interface SessionPayload {
   userId: string;
+  role: Role;
   [key: string]: unknown;
 }
 
@@ -43,9 +45,9 @@ async function decrypt(token: string | undefined): Promise<SessionPayload | null
   }
 }
 
-export async function createSession(userId: string) {
+export async function createSession(userId: string, role: Role) {
   const expiresAt = new Date(Date.now() + parseDurationMs(env.JWT_EXPIRES_IN));
-  const session = await encrypt({ userId });
+  const session = await encrypt({ userId, role });
   const cookieStore = await cookies();
 
   cookieStore.set(COOKIE_NAME, session, {

@@ -64,6 +64,7 @@ export default function ProductCard({
           }}
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
           aria-pressed={wishlisted}
+          suppressHydrationWarning
           className="absolute top-3 right-3 bg-[var(--bg)]/80 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
           <Heart
@@ -77,6 +78,7 @@ export default function ProductCard({
             e.preventDefault();
             addItem(product, 1);
           }}
+          suppressHydrationWarning
           className="absolute bottom-0 inset-x-0 bg-obsidian/90 text-ivory text-xs uppercase tracking-luxe py-3 flex items-center justify-center gap-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
         >
           <ShoppingBag size={14} /> Quick Add

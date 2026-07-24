@@ -55,11 +55,13 @@ export default function Newsletter() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 aria-label="Email address"
+                suppressHydrationWarning
                 className="flex-1 bg-transparent py-3 text-sm outline-none placeholder:opacity-40"
               />
               <button
                 type="submit"
                 aria-label="Subscribe"
+                suppressHydrationWarning
                 className="p-2 text-champagne hover:translate-x-1 transition-transform"
               >
                 <ArrowRight size={20} />

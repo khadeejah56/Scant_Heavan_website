@@ -42,13 +42,12 @@ export async function signup(
   const { name, email, password } = parsed.data;
   const passwordHash = await bcrypt.hash(password, 12);
 
-  let userId: string;
   try {
     const user = await prisma.user.create({
       data: { name, email, passwordHash },
-      select: { id: true },
+      select: { id: true, role: true },
     });
-    userId = user.id;
+    await createSession(user.id, user.role);
   } catch (err) {
     if (
       err instanceof Prisma.PrismaClientKnownRequestError &&
@@ -59,7 +58,6 @@ export async function signup(
     throw err;
   }
 
-  await createSession(userId);
   redirect("/account");
 }
 
@@ -84,7 +82,7 @@ export async function login(
     return { error: "Invalid email or password." };
   }
 
-  await createSession(user.id);
+  await createSession(user.id, user.role);
   redirect("/account");
 }
 

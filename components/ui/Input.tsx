@@ -20,6 +20,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
+          suppressHydrationWarning
           className={cn(
             "w-full bg-transparent border-b border-current/20 py-2.5 text-sm outline-none focus:border-champagne transition-colors placeholder:opacity-40",
             error && "border-red-400",

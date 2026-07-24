@@ -4,6 +4,7 @@ import { getSessionPayload } from "@/lib/session";
 
 const protectedRoutes = ["/account", "/checkout"];
 const authRoutes = ["/login", "/signup"];
+const adminRoutes = ["/admin"];
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -11,11 +12,18 @@ export async function proxy(request: NextRequest) {
     (route) => path === route || path.startsWith(`${route}/`)
   );
   const isAuthRoute = authRoutes.includes(path);
+  const isAdminRoute = adminRoutes.some(
+    (route) => path === route || path.startsWith(`${route}/`)
+  );
 
   const session = await getSessionPayload();
 
-  if (isProtectedRoute && !session?.userId) {
+  if ((isProtectedRoute || isAdminRoute) && !session?.userId) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (isAdminRoute && session?.role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/account", request.url));
   }
 
   if (isAuthRoute && session?.userId) {
@@ -26,5 +34,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/account/:path*", "/checkout", "/login", "/signup"],
+  matcher: ["/account/:path*", "/checkout", "/login", "/signup", "/admin/:path*"],
 };
