@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { products, getProductBySlug, getRelatedProducts } from "@/data/products";
+import { getProductBySlug, getRelatedProducts } from "@/lib/products";
 import { reviews } from "@/data/reviews";
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductInfo from "@/components/product/ProductInfo";
@@ -8,9 +8,9 @@ import ProductReviews from "@/components/product/ProductReviews";
 import RelatedProducts from "@/components/product/RelatedProducts";
 import PageWrapper from "@/components/layout/PageWrapper";
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
-}
+// Products are admin-editable, so always fetch fresh rather than caching
+// a static build-time snapshot.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -18,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return { title: "Fragrance Not Found" };
 
   return {
@@ -38,11 +38,11 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
   const productReviews = reviews.filter((r) => r.productId === product.id);
-  const related = getRelatedProducts(product);
+  const related = await getRelatedProducts(product);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -53,7 +53,7 @@ export default async function ProductDetailPage({
     brand: { "@type": "Brand", name: "HUSSAIN" },
     offers: {
       "@type": "Offer",
-      priceCurrency: "USD",
+      priceCurrency: "PKR",
       price: product.price,
       availability:
         product.stock > 0

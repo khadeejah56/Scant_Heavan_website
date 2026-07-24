@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import { categories } from "@/data/products";
 import { Category, Concentration, SortOption } from "@/types";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { EASE_LUXE } from "@/lib/motion";
 
 export interface FilterState {
@@ -130,16 +130,16 @@ function FiltersContent({ filters, onChange }: ProductFiltersProps) {
       <FilterGroup title="Max Price">
         <input
           type="range"
-          min={100}
-          max={350}
-          step={10}
+          min={30000}
+          max={130000}
+          step={1000}
           value={filters.maxPrice}
           onChange={(e) =>
             onChange({ ...filters, maxPrice: Number(e.target.value) })
           }
           className="w-full accent-champagne"
         />
-        <p className="text-sm opacity-70">Up to ${filters.maxPrice}</p>
+        <p className="text-sm opacity-70">Up to {formatPrice(filters.maxPrice)}</p>
       </FilterGroup>
     </div>
   );

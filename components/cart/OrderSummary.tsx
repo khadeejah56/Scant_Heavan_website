@@ -6,12 +6,15 @@ interface OrderSummaryProps {
   showButton?: boolean;
 }
 
+const FREE_SHIPPING_THRESHOLD = 56000;
+const DEFAULT_SHIPPING_COST = 4200;
+
 export default function OrderSummary({
   subtotal,
   shipping = 0,
 }: OrderSummaryProps) {
-  const isFreeShipping = subtotal >= 200 || shipping === 0;
-  const shippingCost = isFreeShipping ? 0 : shipping || 15;
+  const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD || shipping === 0;
+  const shippingCost = isFreeShipping ? 0 : shipping || DEFAULT_SHIPPING_COST;
   const tax = subtotal * 0.08;
   const total = subtotal + shippingCost + tax;
 
@@ -35,7 +38,8 @@ export default function OrderSummary({
       </div>
       {!isFreeShipping && (
         <p className="text-xs opacity-60 pt-1">
-          Add {formatPrice(200 - subtotal)} more for complimentary shipping.
+          Add {formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} more for
+          complimentary shipping.
         </p>
       )}
     </div>

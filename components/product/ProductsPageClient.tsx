@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { products } from "@/data/products";
-import { Category } from "@/types";
+import { Category, Product } from "@/types";
 import ProductFilters, {
   FilterState,
   FilterToolbar,
@@ -12,7 +11,7 @@ import ProductGrid from "@/components/product/ProductGrid";
 import PageWrapper from "@/components/layout/PageWrapper";
 import ScrollReveal from "@/components/ScrollReveal";
 
-export default function ProductsPageClient() {
+export default function ProductsPageClient({ products }: { products: Product[] }) {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category") as Category | null;
   const query = searchParams.get("q")?.toLowerCase() ?? "";
@@ -20,7 +19,7 @@ export default function ProductsPageClient() {
   const [filters, setFilters] = useState<FilterState>({
     categories: initialCategory ? [initialCategory] : [],
     concentrations: [],
-    maxPrice: 350,
+    maxPrice: 130000,
     sort: "featured",
   });
 
@@ -64,7 +63,7 @@ export default function ProductsPageClient() {
     }
 
     return list;
-  }, [filters, query]);
+  }, [products, filters, query]);
 
   return (
     <PageWrapper className="max-w-[1600px] mx-auto px-5 md:px-10 pt-32 pb-24">

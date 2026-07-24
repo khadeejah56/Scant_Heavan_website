@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { products } from "@/data/products";
+import { getBestSellers } from "@/lib/products";
 import ProductCard from "@/components/product/ProductCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import Button from "@/components/ui/Button";
 
-export default function BestSellers() {
-  const bestSellers = products.filter((p) => p.bestSeller).slice(0, 4);
+export default async function BestSellers() {
+  const bestSellers = await getBestSellers(4);
 
   return (
     <section className="max-w-[1600px] mx-auto px-5 md:px-10 py-24">

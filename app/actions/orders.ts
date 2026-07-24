@@ -4,7 +4,9 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/dal";
-import { products } from "@/data/products";
+
+const FREE_SHIPPING_THRESHOLD = 56000;
+const FLAT_SHIPPING_COST = 4200;
 
 export interface CheckoutState {
   error?: string;
@@ -62,13 +64,18 @@ export async function createOrder(
 
   // Recompute every line item from the trusted server-side catalog — the
   // client only ever sends product ids and quantities, never prices.
+  const catalog = await prisma.product.findMany({
+    where: { id: { in: cart.map((line) => line.productId) } },
+  });
+  const catalogById = new Map(catalog.map((p) => [p.id, p]));
+
   const items = cart.map((line) => {
-    const product = products.find((p) => p.id === line.productId);
+    const product = catalogById.get(line.productId);
     return product
       ? {
           productId: product.id,
           name: product.name,
-          image: product.images[0],
+          image: (product.images as string[])[0],
           price: product.price,
           quantity: line.quantity,
         }
@@ -81,7 +88,7 @@ export async function createOrder(
 
   const validItems = items as Exclude<(typeof items)[number], null>[];
   const subtotal = validItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  const shippingCost = subtotal >= 200 ? 0 : 15;
+  const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING_COST;
   const tax = subtotal * 0.08;
   const total = subtotal + shippingCost + tax;
 

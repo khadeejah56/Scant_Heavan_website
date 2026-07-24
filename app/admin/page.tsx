@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Users, Package, DollarSign } from "lucide-react";
+import { Users, Package, DollarSign, ShoppingBag } from "lucide-react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { requireAdmin } from "@/lib/dal";
 import { prisma } from "@/lib/db";
@@ -14,15 +14,17 @@ export const metadata: Metadata = {
 export default async function AdminPage() {
   await requireAdmin();
 
-  const [userCount, orderCount, revenue] = await Promise.all([
+  const [userCount, orderCount, productCount, revenue] = await Promise.all([
     prisma.user.count(),
     prisma.order.count(),
+    prisma.product.count(),
     prisma.order.aggregate({ _sum: { total: true } }),
   ]);
 
   const stats = [
     { label: "Customers", value: userCount, icon: Users },
     { label: "Orders", value: orderCount, icon: Package },
+    { label: "Products", value: productCount, icon: ShoppingBag },
     {
       label: "Total Revenue",
       value: formatPrice(revenue._sum.total ?? 0),
@@ -39,7 +41,7 @@ export default async function AdminPage() {
         <h1 className="font-display text-4xl md:text-5xl">Dashboard</h1>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-6 mb-14">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
         {stats.map(({ label, value, icon: Icon }) => (
           <div key={label} className="border border-current/10 p-6">
             <Icon className="text-champagne mb-4" size={22} />
@@ -49,12 +51,20 @@ export default async function AdminPage() {
         ))}
       </div>
 
-      <Link
-        href="/admin/orders"
-        className="inline-block text-xs uppercase tracking-luxe text-champagne hover:underline"
-      >
-        Manage Orders →
-      </Link>
+      <div className="flex gap-8">
+        <Link
+          href="/admin/orders"
+          className="text-xs uppercase tracking-luxe text-champagne hover:underline"
+        >
+          Manage Orders →
+        </Link>
+        <Link
+          href="/admin/products"
+          className="text-xs uppercase tracking-luxe text-champagne hover:underline"
+        >
+          Manage Products →
+        </Link>
+      </div>
     </PageWrapper>
   );
 }

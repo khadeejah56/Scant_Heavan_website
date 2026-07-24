@@ -127,7 +127,7 @@ export default function ProductInfo({ product }: { product: Product }) {
       <div className="mt-8 grid grid-cols-2 gap-4 text-xs opacity-70">
         <div className="flex items-center gap-2">
           <Truck size={16} className="text-champagne shrink-0" />
-          Complimentary shipping over $200
+          Complimentary shipping over Rs 56,000
         </div>
         <div className="flex items-center gap-2">
           <RotateCcw size={16} className="text-champagne shrink-0" />
@@ -149,7 +149,7 @@ export default function ProductInfo({ product }: { product: Product }) {
         <Accordion title="Shipping & Returns">
           <p>
             Orders ship within 1–2 business days. Complimentary shipping on
-            orders over $200; standard shipping is $15. Unopened items may be
+            orders over Rs 56,000; standard shipping is Rs 4,200. Unopened items may be
             returned within 30 days of delivery for a full refund.
           </p>
         </Accordion>

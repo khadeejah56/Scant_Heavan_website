@@ -5,6 +5,10 @@ import BestSellers from "@/components/home/BestSellers";
 import Testimonials from "@/components/home/Testimonials";
 import Newsletter from "@/components/home/Newsletter";
 
+// BestSellers queries the admin-editable product catalog, so the homepage
+// should always render fresh rather than caching a static build-time snapshot.
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
   return (
     <>

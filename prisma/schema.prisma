@@ -61,3 +61,27 @@ model OrderItem {
   price     Float
   quantity  Int
 }
+
+model Product {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  name              String
+  brandLine         String
+  category          String
+  price             Float
+  compareAtPrice    Float?
+  size              String
+  concentration     String
+  images            Json
+  shortDescription  String
+  description       String
+  notes             Json
+  rating            Float    @default(0)
+  reviewCount       Int      @default(0)
+  bestSeller        Boolean  @default(false)
+  featured          Boolean  @default(false)
+  newArrival        Boolean  @default(false)
+  stock             Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
