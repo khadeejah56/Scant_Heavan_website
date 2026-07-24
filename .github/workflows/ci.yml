@@ -13,7 +13,6 @@ jobs:
       DATABASE_URL: "file:./ci.db"
       JWT_SECRET: "ci-only-placeholder-secret-do-not-use-in-production"
       JWT_EXPIRES_IN: "7d"
-      NODE_ENV: "production"
       APP_URL: "http://localhost:3000"
     steps:
       - uses: actions/checkout@v4
