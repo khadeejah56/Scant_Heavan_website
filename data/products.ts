@@ -372,6 +372,29 @@ export const products: Product[] = [
     newArrival: true,
     stock: 36,
   },
+  {
+    id: "17",
+    slug: "bleu-absolu",
+    name: "Bleu Absolu",
+    brandLine: "HUSSAIN",
+    category: "mens",
+    price: 55300,
+    size: "100ml",
+    concentration: "Eau de Parfum",
+    images: ["/images/products/mens/men5.png"],
+    shortDescription: "Crisp citrus and mint over warm incense woods.",
+    description:
+      "A modern aromatic-woody signature — bright grapefruit and mint sharpened with pink pepper, settling into ginger and jasmine before a smoky base of incense, cedar, and sandalwood. Confident and versatile from desk to evening.",
+    notes: {
+      top: ["Grapefruit", "Mint", "Pink Pepper"],
+      heart: ["Ginger", "Jasmine"],
+      base: ["Incense", "Cedarwood", "Sandalwood"],
+    },
+    rating: 4.7,
+    reviewCount: 0,
+    newArrival: true,
+    stock: 25,
+  },
 ];
 
 export const getProductBySlug = (slug: string) =>
